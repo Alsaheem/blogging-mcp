@@ -1,0 +1,16 @@
+.venv/
+.cursor/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.env
+*.egg-info/
+dist/
+build/
+.DS_Store
+
+# Local-only helper for merging Cursor MCP config from .env (not shipped)
+add_cursor_mcp.py

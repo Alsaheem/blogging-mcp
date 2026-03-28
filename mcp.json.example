@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "blogging": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "blogging_mcp"],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  }
+}
