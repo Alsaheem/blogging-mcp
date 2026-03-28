@@ -11,6 +11,7 @@ def main() -> None:
         stream=sys.stderr,
     )
     from blogging_mcp.config import Settings
+    from blogging_mcp.request_settings import mcp_http_middleware
     from blogging_mcp.server import mcp
 
     settings = Settings()
@@ -19,6 +20,7 @@ def main() -> None:
             transport="http",
             host=settings.mcp_http_host,
             port=settings.mcp_http_port,
+            middleware=mcp_http_middleware(),
         )
     else:
         mcp.run(transport="stdio")

@@ -20,6 +20,10 @@ RUN uv sync --frozen --no-dev
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 
+ENV MCP_TRANSPORT=http
+ENV MCP_HTTP_HOST=0.0.0.0 
+ENV MCP_HTTP_PORT=8765
+
 EXPOSE 8765
 
 RUN useradd --create-home --uid 1000 app && chown -R app:app /app

@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "blogging-mcp": {
-      "url": "http://127.0.0.1:8765/mcp",
+      "url": "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
       "headers": {
         "X-DEVTO-API-KEY": "eW91ci1kZXZ0by1hcGkta2V5LWhlcmU=",
         "X-HASHNODE-TOKEN": "eW91ci1oYXNobm9kZS1wZXJzb25hbC1hY2Nlc3MtdG9rZW4taGVyZQ==",

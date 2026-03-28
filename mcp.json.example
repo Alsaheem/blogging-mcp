@@ -3,8 +3,8 @@
     "blogging": {
       "command": "uv",
       "args": ["run", "python", "-m", "blogging_mcp"],
-      "cwd": "${workspaceFolder}",
-      "envFile": "${workspaceFolder}/.env"
+      "cwd": "/absolute/path/to/blogging-articles-mcp",
+      "envFile": "/absolute/path/to/blogging-articles-mcp/.env"
     }
   }
 }

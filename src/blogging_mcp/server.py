@@ -8,6 +8,7 @@ from blogging_mcp.clients.devto import DevtoApiError, DevtoClient
 from blogging_mcp.clients.hashnode import HashnodeApiError, HashnodeClient
 from blogging_mcp.config import Settings
 from blogging_mcp.models.article import PublishArticleInput
+from blogging_mcp.request_settings import effective_settings
 from blogging_mcp.services.publisher import Publisher
 
 mcp = FastMCP(
@@ -26,7 +27,7 @@ mcp = FastMCP(
 
 
 def _settings() -> Settings:
-    return Settings()
+    return effective_settings()
 
 
 def _devto() -> DevtoClient:
