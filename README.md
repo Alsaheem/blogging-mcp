@@ -2,17 +2,15 @@
 
 An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://gofastmcp.com/) that publishes Markdown articles to **dev.to** and **Hashnode** in one call. Hashnode uses the [GraphQL API](https://docs.hashnode.com/quickstart/introduction) (`POST https://gql.hashnode.com`); see the [Hashnode API reference](https://apidocs.hashnode.com/).
 
-## Quick start: Cursor and Claude Desktop
+## Quick start (hosted MCP)
 
-You do **not** need to clone this repo or install Python for **HTTP** mode—only your dev.to and Hashnode credentials and the JSON below.
+Use the **remote** server—no clone, no Python, no local process. You only need dev.to and Hashnode credentials and a client config.
 
-**Short path:** Base64-encode the three values ([Credentials](#1-credentials)). **Cursor:** copy [`mcp.cursor.json.local.example`](mcp.cursor.json.local.example) → `~/.cursor/mcp.json`, paste your Base64 strings, run [`MCP_TRANSPORT=http`](#run-the-server), restart Cursor. **Claude Desktop:** copy [`mcp.claude.json.local.example`](mcp.claude.json.local.example) into `claude_desktop_config.json`, same values in `--header` lines, run the HTTP server, restart Claude.
+**Endpoint:** `https://blogging-mcp-81529650669.europe-west1.run.app/mcp`
 
-### 1. Credentials
+### Encode your credentials
 
-Get your own keys from dev.to and Hashnode (see table). For **HTTP** MCP, put each value in the `"headers"` block as **standard Base64** (UTF-8 string, then encode). The server **decodes** Base64 on each request; if decoding fails (invalid Base64 or not valid UTF-8), the raw string is used so plain text still works.
-
-Encode on the command line (use `echo -n` so you do not add a newline):
+HTTP clients send three headers. Values must be **standard Base64** (UTF-8, then encode). The server decodes Base64 on each request; if decoding fails, the raw string is tried so plain text can still work.
 
 ```bash
 echo -n 'paste-your-real-devto-key-here' | base64
@@ -20,49 +18,23 @@ echo -n 'paste-your-hashnode-token-here' | base64
 echo -n 'yourblog.hashnode.dev' | base64
 ```
 
-Paste the **single-line** output into the matching header value in `mcp.json`.
+Use `echo -n` so you do not add a trailing newline.
 
-| Where to get the value | Header name in JSON |
-|------------------------|---------------------|
+| Where to get the value | Header name |
+|------------------------|-------------|
 | [dev.to API key](https://dev.to/settings/extensions) → **DEV Community API Keys** | `X-DEVTO-API-KEY` |
 | [Hashnode PAT](https://hashnode.com/settings/developer) | `X-HASHNODE-TOKEN` |
 | Your blog host, e.g. `username.hashnode.dev` | `X-HASHNODE-PUBLICATION-HOST` |
 
-**Security:** a file with real secrets is sensitive. Do **not** commit `mcp.json` to git if it contains tokens; keep it only on your machine (or use a global config path outside any repo).
+Paste each **single-line** Base64 output into the matching field below. The snippets use **dummy** Base64—replace with yours.
 
-For **HTTP** MCP (`"url": …`), credentials are sent with the **`"headers"`** block on each request. The `"env"` key in `mcp.json` only applies to **stdio** servers Cursor spawns locally—not to remote HTTP.
+**Security:** do **not** commit real tokens to git. `mcp.json` and `claude_desktop_config.json` with secrets should stay only on your machine.
 
-### 2. Cursor
+A single `Authorization: Bearer …` header is **not** enough for this server unless you add a proxy that maps it to these three values.
 
-**File:** `mcp.json` in Cursor’s config directory:
+### Cursor (remote)
 
-| OS | Path |
-|----|------|
-| macOS / Linux | `~/.cursor/mcp.json` |
-| Windows | `%USERPROFILE%\.cursor\mcp.json` |
-
-Create `~/.cursor` (or the Windows equivalent) if needed, or open **Cursor Settings → MCP** and edit from there.
-
-**Pattern:** `"url"` + `"headers"`. Values are **Base64** (see [Credentials](#1-credentials)). The snippets below use **dummy** Base64—replace with encodings of your **real** secrets.
-
-**Local server** — start the app first with `MCP_TRANSPORT=http` (default `http://127.0.0.1:8765/mcp`):
-
-```json
-{
-  "mcpServers": {
-    "blogging-mcp": {
-      "url": "http://127.0.0.1:8765/mcp",
-      "headers": {
-        "X-DEVTO-API-KEY": "ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
-        "X-HASHNODE-TOKEN": "MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
-        "X-HASHNODE-PUBLICATION-HOST": "ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
-      }
-    }
-  }
-}
-```
-
-**Hosted URL** — same `headers` shape; only `"url"` changes (see [`mcp.cursor.json.remote.example`](mcp.cursor.json.remote.example)):
+**File:** `~/.cursor/mcp.json` (macOS/Linux) or `%USERPROFILE%\.cursor\mcp.json` (Windows). You can also edit from **Cursor Settings → MCP**.
 
 ```json
 {
@@ -79,15 +51,13 @@ Create `~/.cursor` (or the Windows equivalent) if needed, or open **Cursor Setti
 }
 ```
 
-A single `Authorization: Bearer …` header is **not** enough for this server unless you add your own proxy that maps one token to these three values.
+Fully **quit Cursor** and reopen so MCP reloads.
 
-**After saving:** fully **quit Cursor** (*Cursor → Quit* / Cmd+Q on macOS) and open it again so MCP reloads.
+Example file: [`mcp.cursor.json.remote.example`](mcp.cursor.json.remote.example).
 
-Copy-paste examples: [`mcp.cursor.json.local.example`](mcp.cursor.json.local.example), [`mcp.cursor.json.remote.example`](mcp.cursor.json.remote.example).
+### Claude Desktop (remote)
 
-### 3. Claude Desktop
-
-**Claude Desktop does not support** Cursor’s `"url"` + `"headers"` block. Use **[`mcp-remote`](https://github.com/geelen/mcp-remote)** (`npx`, Node 18+) to connect to the same HTTP URL, or run **stdio** from a clone (plain `env`, no Base64)—see [Run from source](#run-from-source-optional).
+Claude does **not** support Cursor’s `"url"` + `"headers"` block. Use **[`mcp-remote`](https://github.com/geelen/mcp-remote)** (Node 18+, `npx`) to connect to the **same HTTPS URL**. **Do not** pass `--allow-http` for this hosted URL.
 
 **File:**
 
@@ -97,9 +67,47 @@ Copy-paste examples: [`mcp.cursor.json.local.example`](mcp.cursor.json.local.exa
 | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
 | Linux | `~/.config/Claude/claude_desktop_config.json` |
 
-Keep `"preferences"` (and any other keys) in the **same** JSON object as `"mcpServers"`.
+Merge `"mcpServers"` with any existing keys (e.g. `"preferences"`).
 
-**HTTP via `mcp-remote`** — start [`MCP_TRANSPORT=http`](#run-the-server) first. Each credential is a separate `--header` with **`Name: base64`** (space after the colon). Local example:
+```json
+{
+  "mcpServers": {
+    "blogging-mcp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+        "--header",
+        "X-DEVTO-API-KEY: ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "--header",
+        "X-HASHNODE-TOKEN: MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "--header",
+        "X-HASHNODE-PUBLICATION-HOST: ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
+      ]
+    }
+  }
+}
+```
+
+If `npx` prompts to install on first run, use `"args": ["-y", "mcp-remote", ...]` instead of `"mcp-remote"` as the first arg.
+
+Fully **quit Claude Desktop** and reopen. **Claude web / Connectors** often cannot send these headers; use **Desktop + `mcp-remote`** (or stdio from a clone—see below).
+
+Example file: [`mcp.claude.json.remote.example`](mcp.claude.json.remote.example).
+
+---
+
+## Local and self-hosted (optional)
+
+Run the MCP on your machine or your own host if you need offline use, custom URLs, or development.
+
+### Cursor (local URL)
+
+Start the server ([Run the server](#run-the-server)), then point `mcp.json` at `http://127.0.0.1:8765/mcp` with the same three Base64 headers. Example: [`mcp.cursor.json.local.example`](mcp.cursor.json.local.example).
+
+### Claude Desktop (local + `mcp-remote`)
+
+With a **local** HTTP server you must allow non-TLS HTTP:
 
 ```json
 {
@@ -122,23 +130,11 @@ Keep `"preferences"` (and any other keys) in the **same** JSON object as `"mcpSe
 }
 ```
 
-Hosted: use [`mcp.claude.json.remote.example`](mcp.claude.json.remote.example) (HTTPS URL, **no** `--allow-http`). If `npx` hangs on first install, use `"args": ["-y", "mcp-remote", ...]`.
+Example: [`mcp.claude.json.local.example`](mcp.claude.json.local.example).
 
-**After saving:** fully **quit Claude Desktop** and reopen. **Claude web / Connectors** may not support custom headers; prefer **stdio** or **`mcp-remote`** here.
+### Run from source (stdio)
 
-Examples: [`mcp.claude.json.local.example`](mcp.claude.json.local.example), [`mcp.claude.json.remote.example`](mcp.claude.json.remote.example).
-
-### Run from source (optional)
-
-Only if you **develop** this repo or **self-host** (e.g. `http://127.0.0.1:8765/mcp`). Use `~/.cursor/mcp.json` with **stdio** or a custom `"url"`:
-
-| Pattern | Notes |
-|---------|--------|
-| stdio + `.env` | `cwd` + `envFile` pointing at your clone and `.env` (see stdio JSON below) |
-| stdio + shell env | `"cwd": "/absolute/path/to/blogging-articles-mcp"` and `"env": { "DEVTO_API_KEY": "…", … }` (plain strings) |
-| Local HTTP | `"url": "http://127.0.0.1:8765/mcp"` and **`headers`** (see [Cursor](#2-cursor)); run `MCP_TRANSPORT=http uv run python -m blogging_mcp` |
-
-**Claude Desktop (stdio)** — replace `cwd` with your clone path:
+Clone the repo and use **stdio** with plain `env` (no Base64). Replace `cwd` with your clone path:
 
 ```json
 {
@@ -146,7 +142,7 @@ Only if you **develop** this repo or **self-host** (e.g. `http://127.0.0.1:8765/
     "blogging-mcp": {
       "command": "uv",
       "args": ["run", "python", "-m", "blogging_mcp"],
-      "cwd": "/absolute/path/to/blogging-articles-mcp",
+      "cwd": "/absolute/path/to/blogging-mcp",
       "env": {
         "DEVTO_API_KEY": "your-devto-api-key-here",
         "HASHNODE_TOKEN": "your-hashnode-personal-access-token-here",
@@ -157,7 +153,7 @@ Only if you **develop** this repo or **self-host** (e.g. `http://127.0.0.1:8765/
 }
 ```
 
-**Security:** A public HTTP MCP URL without authentication can be abused if anyone can reach it. This project does not ship OAuth on the HTTP listener; use auth in front of self-hosted deployments when needed.
+**Security:** a public HTTP MCP URL without authentication can be abused if anyone can reach it. This project does not ship OAuth on the HTTP listener; use auth in front of self-hosted deployments when needed.
 
 ---
 
@@ -171,7 +167,7 @@ Only if you **develop** this repo or **self-host** (e.g. `http://127.0.0.1:8765/
 Clone the repository and install dependencies:
 
 ```bash
-cd blogging-articles-mcp
+cd blogging-mcp
 uv sync --all-groups
 ```
 

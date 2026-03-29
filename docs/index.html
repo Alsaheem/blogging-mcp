@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blogging MCP — dev.to &amp; Hashnode from your editor</title>
-  <meta name="description" content="Model Context Protocol server: publish Markdown to dev.to and Hashnode in one call. FastMCP, Cursor, Claude Desktop." />
+  <title>Blogging MCP — dev.to &amp; Hashnode from Cursor or Claude</title>
+  <meta name="description" content="After a hard-won technical fix, turn the write-up into drafts on dev.to and Hashnode via your AI agent—without the copy-paste hassle." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -17,7 +17,6 @@
       --accent: #c4a574;
       --accent-dim: #8b7355;
       --border: #2d2925;
-      --radius: 12px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -26,7 +25,7 @@
       min-height: 100vh;
       font-family: "Syne", system-ui, sans-serif;
       font-size: 1.05rem;
-      line-height: 1.6;
+      line-height: 1.7;
       color: var(--text);
       background: var(--bg);
       background-image:
@@ -34,190 +33,306 @@
         radial-gradient(ellipse 60% 40% at 100% 100%, #1a1510 0%, transparent 45%);
     }
     .wrap {
-      max-width: 44rem;
+      width: 100%;
+      max-width: min(56rem, 100%);
       margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
+      padding: 3rem clamp(1.25rem, 5vw, 3.5rem) 4.5rem;
     }
-    header { margin-bottom: 2.5rem; }
+    header { margin-bottom: 2rem; }
+    .problem {
+      margin-bottom: 2.5rem;
+      padding: 1.5rem 1.35rem 1.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      border-left: 4px solid var(--accent);
+    }
+    .problem h2 {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+      margin: 0 0 0.75rem;
+      color: var(--text);
+    }
+    .problem p {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+    }
+    .problem p:first-of-type { margin-top: 0; }
     .eyebrow {
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--accent-dim);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.6rem;
     }
     h1 {
       font-family: "Instrument Serif", Georgia, serif;
-      font-size: clamp(2.25rem, 6vw, 3.25rem);
+      font-size: clamp(2rem, 5.5vw, 2.85rem);
       font-weight: 400;
-      line-height: 1.15;
-      margin: 0 0 1rem;
+      line-height: 1.12;
+      margin: 0 0 0.85rem;
       letter-spacing: -0.02em;
     }
-    h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
+    h1 em { font-style: italic; color: var(--accent); }
     .lede {
-      font-size: 1.15rem;
+      font-size: 1.08rem;
       color: var(--muted);
-      max-width: 36rem;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1.75rem;
-    }
-    a.btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1.15rem;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      border: 1px solid var(--border);
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-    a.btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent);
-    }
-    a.btn-primary:hover {
-      filter: brightness(1.08);
-    }
-    a.btn-ghost {
-      color: var(--text);
-      background: transparent;
-    }
-    a.btn-ghost:hover {
-      border-color: var(--accent-dim);
-      color: var(--accent);
+      max-width: 48rem;
+      margin: 0;
+      line-height: 1.7;
     }
     section {
       margin-top: 2.75rem;
-      padding-top: 2rem;
+      padding-top: 2.25rem;
       border-top: 1px solid var(--border);
+    }
+    section.problem {
+      margin-top: 1.25rem;
+      padding-top: 0;
+      border-top: none;
     }
     h2 {
       font-family: "Instrument Serif", Georgia, serif;
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 400;
       margin: 0 0 1rem;
-      color: var(--text);
     }
-    ul.links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
-    ul.links li {
-      margin-bottom: 0.65rem;
+    p { margin: 0.65rem 0 0; color: var(--muted); }
+    p strong, li strong { color: var(--text); }
+    ol.keys {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+      color: var(--muted);
     }
-    ul.links a {
+    ol.keys li { margin-bottom: 0.5rem; }
+    ol.keys a {
       color: var(--accent);
       text-decoration: none;
       border-bottom: 1px solid transparent;
     }
-    ul.links a:hover {
-      border-bottom-color: var(--accent-dim);
-    }
-    ul.links span {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 0.15rem;
-    }
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-    .pill {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
+    ol.keys a:hover { border-bottom-color: var(--accent-dim); }
+    .endpoint {
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      padding: 0.65rem 0.85rem;
       background: var(--surface);
       border: 1px solid var(--border);
-      color: var(--muted);
+      border-radius: 8px;
+      word-break: break-all;
+      color: var(--accent);
+      font-family: ui-monospace, monospace;
     }
-    footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+    .code-label {
+      font-size: 0.78rem;
+      color: var(--accent-dim);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+    pre.config {
+      margin: 0.5rem 0 0;
+      padding: 1.15rem 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: #d4cfc4;
+    }
+    pre.config code {
+      font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    }
+    .path-hint {
       font-size: 0.85rem;
       color: var(--muted);
+      margin-top: 0.5rem;
     }
-    footer a { color: var(--accent-dim); }
+    .repo-footer {
+      margin-top: 3rem;
+      padding: 2rem clamp(1rem, 3vw, 2.5rem);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+    }
+    .repo-footer p {
+      color: var(--muted);
+      margin: 0.75rem 0 0;
+      font-size: 0.95rem;
+      max-width: 38rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .repo-footer p:first-child { margin-top: 0; }
+    .repo-footer a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .repo-footer a:hover { text-decoration: underline; }
+    .repo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-top: 1.1rem;
+    }
+    .repo-actions a.btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .repo-actions a.btn-star {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+    .repo-actions a.btn-star:hover { filter: brightness(1.06); }
+    .repo-actions a.btn-ghost {
+      color: var(--text);
+      background: transparent;
+    }
+    .repo-actions a.btn-ghost:hover {
+      border-color: var(--accent-dim);
+      color: var(--accent);
+    }
+    footer.legal {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+  <!-- Set REPO if you fork (search/replace github.com/alsaheem/blogging-mcp) -->
   <div class="wrap">
     <header>
       <p class="eyebrow">Model Context Protocol</p>
       <h1>Blogging <em>MCP</em></h1>
-      <p class="lede">
-        Publish Markdown to <strong>dev.to</strong> and <strong>Hashnode</strong> in one tool call.
-        Built with <a href="https://gofastmcp.com/" style="color: var(--accent);">FastMCP</a> — use it from
-        <strong>Cursor</strong> (HTTP) or <strong>Claude Desktop</strong> (via <code style="color: var(--accent-dim);">mcp-remote</code>).
-      </p>
-      <div class="actions">
-        <!-- If your repo URL differs, update the two hrefs below. -->
-        <a class="btn btn-primary" href="https://github.com/alsaheem/blogging-articles-mcp">Repository</a>
-        <a class="btn btn-ghost" href="https://github.com/alsaheem/blogging-articles-mcp/blob/main/README.md">Full README</a>
-      </div>
-      <div class="pill-row" aria-label="Tech stack">
-        <span class="pill">MCP</span>
-        <span class="pill">Python · uv</span>
-        <span class="pill">dev.to API</span>
-        <span class="pill">Hashnode GraphQL</span>
-      </div>
     </header>
 
-    <section aria-labelledby="config-heading">
-      <h2 id="config-heading">Example configs</h2>
-      <p style="color: var(--muted); margin-top: 0;">
-        Copy these from the repo root and replace the dummy Base64 with your encoded keys. Details in the README.
-      </p>
-      <ul class="links">
-        <li>
-          <a href="https://github.com/alsaheem/blogging-articles-mcp/blob/main/mcp.cursor.json.local.example">mcp.cursor.json.local.example</a>
-          <span>Cursor — local HTTP</span>
-        </li>
-        <li>
-          <a href="https://github.com/alsaheem/blogging-articles-mcp/blob/main/mcp.cursor.json.remote.example">mcp.cursor.json.remote.example</a>
-          <span>Cursor — hosted MCP URL</span>
-        </li>
-        <li>
-          <a href="https://github.com/alsaheem/blogging-articles-mcp/blob/main/mcp.claude.json.local.example">mcp.claude.json.local.example</a>
-          <span>Claude Desktop — local (npx mcp-remote)</span>
-        </li>
-        <li>
-          <a href="https://github.com/alsaheem/blogging-articles-mcp/blob/main/mcp.claude.json.remote.example">mcp.claude.json.remote.example</a>
-          <span>Claude Desktop — remote HTTPS</span>
-        </li>
-      </ul>
-    </section>
-
-    <section aria-labelledby="refs-heading">
-      <h2 id="refs-heading">References</h2>
-      <ul class="links">
-        <li><a href="https://modelcontextprotocol.io/">Model Context Protocol</a></li>
-        <li><a href="https://github.com/geelen/mcp-remote">mcp-remote</a> (Claude → HTTP MCP)</li>
-        <li><a href="https://dev.to/settings/extensions">dev.to API keys</a></li>
-        <li><a href="https://hashnode.com/settings/developer">Hashnode developer token</a></li>
-      </ul>
-    </section>
-
-    <footer>
+    <section class="problem" aria-labelledby="problem-heading">
+      <h2 id="problem-heading">Problem</h2>
       <p>
-        MIT licensed · Not affiliated with dev.to or Hashnode.
-        This page is static; the MCP runs on your machine or your host.
+        You know the situation: you’re stuck on something technical, you pour hours into it, and when you finally solve it you want to write it up—so the next person finds the answer faster.
       </p>
+      <p>
+        But turning that into posts on multiple platforms is a slog: tabs, formatting, logging into each site, and the friction means you never publish—or you publish in one place and nowhere else.
+      </p>
+      <p>
+        <strong style="color: var(--text);">This MCP is for that gap.</strong> Point your AI agent at it (from <strong>Cursor</strong> or <strong>Claude Desktop</strong>) and it can draft the same article in Markdown across <strong>dev.to</strong> and <strong>Hashnode</strong> in one flow. You stay in control: review, edit, and publish (or approve) manually when you’re ready.
+      </p>
+    </section>
+
+    <p class="lede" style="margin-bottom: 2rem;">
+      The rest of this page is the fast path: <strong>get API keys</strong>, <strong>Base64-encode</strong> them for headers, and paste the <strong>remote</strong> configs below—no local server required.
+    </p>
+
+    <section aria-labelledby="keys-heading">
+      <h2 id="keys-heading">Get your API keys</h2>
+
+      <h3>dev.to</h3>
+      <ol class="keys">
+        <li>Open <a href="https://dev.to/settings/extensions">Settings → Extensions</a>.</li>
+        <li>Under <strong>DEV Community API Keys</strong>, create a key and copy it (you will Base64-encode it in the next section).</li>
+      </ol>
+
+      <h3>Hashnode</h3>
+      <ol class="keys">
+        <li>Open <a href="https://hashnode.com/settings/developer">Developer settings</a>.</li>
+        <li>Create a <strong>Personal Access Token</strong> and copy it.</li>
+        <li>Your <strong>publication host</strong> is your blog hostname, e.g. <code style="color: var(--accent);">yourname.hashnode.dev</code> (or your custom domain).</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="encode-heading">
+      <h2 id="encode-heading">Encode values for MCP headers</h2>
+      <p>
+        The server expects three HTTP headers with <strong>Base64</strong>-encoded UTF-8 strings. On macOS or Linux:
+      </p>
+      <pre class="config"><code>echo -n 'YOUR_DEVTO_API_KEY' | base64
+echo -n 'YOUR_HASHNODE_PAT' | base64
+echo -n 'yourblog.hashnode.dev' | base64</code></pre>
+      <p>
+        Use <code style="color: var(--accent-dim);">echo -n</code> so you do not add a newline. Paste each single-line output into the configs below (replace the placeholder Base64).
+      </p>
+      <p class="endpoint" title="Hosted MCP URL">https://blogging-mcp-81529650669.europe-west1.run.app/mcp</p>
+    </section>
+
+    <section aria-labelledby="cursor-heading">
+      <h2 id="cursor-heading">Cursor (remote)</h2>
+      <p class="path-hint">File: <code style="color: var(--accent-dim);">~/.cursor/mcp.json</code> (macOS/Linux) or <code style="color: var(--accent-dim);">%USERPROFILE%\.cursor\mcp.json</code> (Windows). Edit from <strong>Cursor Settings → MCP</strong> if you prefer.</p>
+      <p class="code-label">mcp.json</p>
+      <pre class="config"><code>{
+  "mcpServers": {
+    "blogging-mcp": {
+      "url": "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+      "headers": {
+        "X-DEVTO-API-KEY": "ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "X-HASHNODE-TOKEN": "MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "X-HASHNODE-PUBLICATION-HOST": "ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
+      }
+    }
+  }
+}</code></pre>
+      <p>Fully quit Cursor and reopen so MCP reloads.</p>
+    </section>
+
+    <section aria-labelledby="claude-heading">
+      <h2 id="claude-heading">Claude Desktop (remote)</h2>
+      <p>Claude needs <a href="https://github.com/geelen/mcp-remote" style="color: var(--accent);">mcp-remote</a> (<code>npx</code>, Node 18+). Use the same hosted URL and headers as Base64 after <code>Name: </code>.</p>
+      <p class="path-hint">File: <code style="color: var(--accent-dim);">~/Library/Application Support/Claude/claude_desktop_config.json</code> (macOS), <code style="color: var(--accent-dim);">%APPDATA%\Claude\claude_desktop_config.json</code> (Windows), or <code style="color: var(--accent-dim);">~/.config/Claude/claude_desktop_config.json</code> (Linux). Keep <code>"preferences"</code> in the same JSON object if you already have them.</p>
+      <p class="code-label">claude_desktop_config.json</p>
+      <pre class="config"><code>{
+  "mcpServers": {
+    "blogging-mcp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+        "--header",
+        "X-DEVTO-API-KEY: ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "--header",
+        "X-HASHNODE-TOKEN: MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "--header",
+        "X-HASHNODE-PUBLICATION-HOST: ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
+      ]
+    }
+  }
+}</code></pre>
+      <p>If <code>npx</code> asks to install on first run, add <code>"-y"</code> before <code>"mcp-remote"</code> in <code>args</code>. Fully quit Claude Desktop and reopen.</p>
+    </section>
+
+    <div class="repo-footer">
+      <p><strong style="color: var(--text);">Repository</strong></p>
+      <p>
+        Source code, issues, and full docs live on GitHub. If this project helps you, consider <strong>starring the repo</strong> so others can find it.
+        Contributions—docs, fixes, features—are welcome via pull requests and issues.
+      </p>
+      <div class="repo-actions">
+        <a class="btn btn-star" href="https://github.com/alsaheem/blogging-mcp">GitHub — blogging-mcp</a>
+        <a class="btn btn-ghost" href="https://github.com/alsaheem/blogging-mcp/blob/main/README.md">Full README</a>
+      </div>
+    </div>
+
+    <footer class="legal">
+      MIT licensed · Not affiliated with dev.to or Hashnode · Hosted endpoint may change; check the README for the current URL.
     </footer>
   </div>
 </body>
