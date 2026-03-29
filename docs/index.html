@@ -296,7 +296,13 @@ echo -n 'yourblog.hashnode.dev' | base64</code></pre>
 
     <section aria-labelledby="claude-heading">
       <h2 id="claude-heading">Claude Desktop (remote)</h2>
-      <p>Claude needs <a href="https://github.com/geelen/mcp-remote" style="color: var(--accent);">mcp-remote</a> (<code>npx</code>, Node 18+). Use the same hosted URL and headers as Base64 after <code>Name: </code>.</p>
+      <p>
+        Install <strong>Node.js 20</strong> (LTS) from <a href="https://nodejs.org/" style="color: var(--accent);">nodejs.org</a> if you don’t have it yet. Claude Desktop runs <a href="https://github.com/geelen/mcp-remote" style="color: var(--accent);">mcp-remote</a> via <code>npx</code>; a global install avoids download prompts and PATH issues:
+      </p>
+      <pre class="config"><code>npm install -g mcp-remote</code></pre>
+      <p>
+        In <code>claude_desktop_config.json</code>, use the same <strong>hosted URL</strong> as above and pass each credential as <code>--header</code> with <strong>Base64</strong> after <code>Name: </code> (space after the colon).
+      </p>
       <p class="path-hint">File: <code style="color: var(--accent-dim);">~/Library/Application Support/Claude/claude_desktop_config.json</code> (macOS), <code style="color: var(--accent-dim);">%APPDATA%\Claude\claude_desktop_config.json</code> (Windows), or <code style="color: var(--accent-dim);">~/.config/Claude/claude_desktop_config.json</code> (Linux). Keep <code>"preferences"</code> in the same JSON object if you already have them.</p>
       <p class="code-label">claude_desktop_config.json</p>
       <pre class="config"><code>{
