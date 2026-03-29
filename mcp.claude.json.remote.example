@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "blogging-mcp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+        "--header",
+        "X-DEVTO-API-KEY: ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "--header",
+        "X-HASHNODE-TOKEN: MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "--header",
+        "X-HASHNODE-PUBLICATION-HOST: ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
+      ]
+    }
+  }
+}
