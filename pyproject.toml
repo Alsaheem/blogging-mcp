@@ -1,7 +1,7 @@
 [project]
 name = "blogging-mcp"
 version = "0.1.0"
-description = "MCP server to publish Markdown articles to dev.to and Hashnode"
+description = "MCP server (FastMCP): draft and publish Markdown to dev.to and Hashnode from Cursor or Claude Desktop."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -10,6 +10,10 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
 ]
+
+[project.urls]
+Documentation = "https://alsaheem.github.io/blogging-mcp/"
+Repository = "https://github.com/alsaheem/blogging-mcp"
 
 [project.scripts]
 blogging-mcp = "blogging_mcp.__main__:main"

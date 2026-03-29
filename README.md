@@ -1,6 +1,8 @@
 # Blogging MCP
 
-An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://gofastmcp.com/) that publishes Markdown articles to **dev.to** and **Hashnode** in one call. Hashnode uses the [GraphQL API](https://docs.hashnode.com/quickstart/introduction) (`POST https://gql.hashnode.com`); see the [Hashnode API reference](https://apidocs.hashnode.com/).
+**Documentation & quick setup:** [alsaheem.github.io/blogging-mcp](https://alsaheem.github.io/blogging-mcp/)
+
+An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://gofastmcp.com/) that publishes Markdown articles to **dev.to** and **Hashnode** in one call—so your AI agent can draft posts across both platforms while you review and publish. Hashnode uses the [GraphQL API](https://docs.hashnode.com/quickstart/introduction) (`POST https://gql.hashnode.com`); see the [Hashnode API reference](https://apidocs.hashnode.com/).
 
 ## Quick start (hosted MCP)
 
