@@ -4,7 +4,9 @@ An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://g
 
 ## Quick start: Cursor and Claude Desktop
 
-You do **not** need to clone this repo or install Python—only your own dev.to and Hashnode credentials and the JSON below.
+You do **not** need to clone this repo or install Python for **HTTP** mode—only your dev.to and Hashnode credentials and the JSON below.
+
+**Short path:** Base64-encode the three values ([Credentials](#1-credentials)). **Cursor:** copy [`mcp.cursor.json.local.example`](mcp.cursor.json.local.example) → `~/.cursor/mcp.json`, paste your Base64 strings, run [`MCP_TRANSPORT=http`](#run-the-server), restart Cursor. **Claude Desktop:** copy [`mcp.claude.json.local.example`](mcp.claude.json.local.example) into `claude_desktop_config.json`, same values in `--header` lines, run the HTTP server, restart Claude.
 
 ### 1. Credentials
 
@@ -41,7 +43,7 @@ For **HTTP** MCP (`"url": …`), credentials are sent with the **`"headers"`** b
 
 Create `~/.cursor` (or the Windows equivalent) if needed, or open **Cursor Settings → MCP** and edit from there.
 
-**Pattern:** `"url"` + `"headers"`. Values are **Base64** (see above). The examples below use Base64 of the placeholder strings `your-devto-api-key-here`, etc.—replace with Base64 of your **real** secrets.
+**Pattern:** `"url"` + `"headers"`. Values are **Base64** (see [Credentials](#1-credentials)). The snippets below use **dummy** Base64—replace with encodings of your **real** secrets.
 
 **Local server** — start the app first with `MCP_TRANSPORT=http` (default `http://127.0.0.1:8765/mcp`):
 
@@ -51,16 +53,16 @@ Create `~/.cursor` (or the Windows equivalent) if needed, or open **Cursor Setti
     "blogging-mcp": {
       "url": "http://127.0.0.1:8765/mcp",
       "headers": {
-        "X-DEVTO-API-KEY": "eW91ci1kZXZ0by1hcGkta2V5LWhlcmU=",
-        "X-HASHNODE-TOKEN": "eW91ci1oYXNobm9kZS1wZXJzb25hbC1hY2Nlc3MtdG9rZW4taGVyZQ==",
-        "X-HASHNODE-PUBLICATION-HOST": "eW91cmJsb2cuaGFzaG5vZGUuZGV2"
+        "X-DEVTO-API-KEY": "ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "X-HASHNODE-TOKEN": "MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "X-HASHNODE-PUBLICATION-HOST": "ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
       }
     }
   }
 }
 ```
 
-**Hosted URL** — same `headers` shape; only `"url"` changes:
+**Hosted URL** — same `headers` shape; only `"url"` changes (see [`mcp.cursor.json.remote.example`](mcp.cursor.json.remote.example)):
 
 ```json
 {
@@ -68,9 +70,9 @@ Create `~/.cursor` (or the Windows equivalent) if needed, or open **Cursor Setti
     "blogging-mcp": {
       "url": "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
       "headers": {
-        "X-DEVTO-API-KEY": "eW91ci1kZXZ0by1hcGkta2V5LWhlcmU=",
-        "X-HASHNODE-TOKEN": "eW91ci1oYXNobm9kZS1wZXJzb25hbC1hY2Nlc3MtdG9rZW4taGVyZQ==",
-        "X-HASHNODE-PUBLICATION-HOST": "eW91cmJsb2cuaGFzaG5vZGUuZGV2"
+        "X-DEVTO-API-KEY": "ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "X-HASHNODE-TOKEN": "MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "X-HASHNODE-PUBLICATION-HOST": "ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
       }
     }
   }
@@ -81,9 +83,11 @@ A single `Authorization: Bearer …` header is **not** enough for this server un
 
 **After saving:** fully **quit Cursor** (*Cursor → Quit* / Cmd+Q on macOS) and open it again so MCP reloads.
 
-Examples in-repo: [`mcp.url.json.example`](mcp.url.json.example) (local), [`mcp.url.hosted.json.example`](mcp.url.hosted.json.example) (hosted).
+Copy-paste examples: [`mcp.cursor.json.local.example`](mcp.cursor.json.local.example), [`mcp.cursor.json.remote.example`](mcp.cursor.json.remote.example).
 
 ### 3. Claude Desktop
+
+**Claude Desktop does not support** Cursor’s `"url"` + `"headers"` block. Use **[`mcp-remote`](https://github.com/geelen/mcp-remote)** (`npx`, Node 18+) to connect to the same HTTP URL, or run **stdio** from a clone (plain `env`, no Base64)—see [Run from source](#run-from-source-optional).
 
 **File:**
 
@@ -93,28 +97,36 @@ Examples in-repo: [`mcp.url.json.example`](mcp.url.json.example) (local), [`mcp.
 | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
 | Linux | `~/.config/Claude/claude_desktop_config.json` |
 
-If the file already has other keys (e.g. `"preferences"`), keep them and add `"mcpServers"` in the **same** JSON object.
+Keep `"preferences"` (and any other keys) in the **same** JSON object as `"mcpServers"`.
 
-**Same pattern** if your Claude app supports `"headers"` on remote MCP—**Base64** values, same three header names. Local vs hosted is only the `"url"`:
+**HTTP via `mcp-remote`** — start [`MCP_TRANSPORT=http`](#run-the-server) first. Each credential is a separate `--header` with **`Name: base64`** (space after the colon). Local example:
 
 ```json
 {
   "mcpServers": {
     "blogging-mcp": {
-      "url": "http://127.0.0.1:8765/mcp",
-      "headers": {
-        "X-DEVTO-API-KEY": "eW91ci1kZXZ0by1hcGkta2V5LWhlcmU=",
-        "X-HASHNODE-TOKEN": "eW91ci1oYXNobm9kZS1wZXJzb25hbC1hY2Nlc3MtdG9rZW4taGVyZQ==",
-        "X-HASHNODE-PUBLICATION-HOST": "eW91cmJsb2cuaGFzaG5vZGUuZGV2"
-      }
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://127.0.0.1:8765/mcp",
+        "--allow-http",
+        "--header",
+        "X-DEVTO-API-KEY: ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
+        "--header",
+        "X-HASHNODE-TOKEN: MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
+        "--header",
+        "X-HASHNODE-PUBLICATION-HOST: ZXhhbXBsZWJsb2cuaGFzaG5vZGUuZGV2"
+      ]
     }
   }
 }
 ```
 
-If `"headers"` is not supported, use **stdio** from a local clone (see [Run from source](#run-from-source-optional)) so credentials stay in `env`.
+Hosted: use [`mcp.claude.json.remote.example`](mcp.claude.json.remote.example) (HTTPS URL, **no** `--allow-http`). If `npx` hangs on first install, use `"args": ["-y", "mcp-remote", ...]`.
 
-**After saving:** fully **quit Claude Desktop** and start it again. If the tools do not appear, add the same URL under *Settings → Connectors* per Anthropic’s current docs.
+**After saving:** fully **quit Claude Desktop** and reopen. **Claude web / Connectors** may not support custom headers; prefer **stdio** or **`mcp-remote`** here.
+
+Examples: [`mcp.claude.json.local.example`](mcp.claude.json.local.example), [`mcp.claude.json.remote.example`](mcp.claude.json.remote.example).
 
 ### Run from source (optional)
 
@@ -122,9 +134,9 @@ Only if you **develop** this repo or **self-host** (e.g. `http://127.0.0.1:8765/
 
 | Pattern | Notes |
 |---------|--------|
-| stdio + `.env` | [`mcp.json.example`](mcp.json.example) — `cwd` / `envFile` point at your clone |
+| stdio + `.env` | `cwd` + `envFile` pointing at your clone and `.env` (see stdio JSON below) |
 | stdio + shell env | `"cwd": "/absolute/path/to/blogging-articles-mcp"` and `"env": { "DEVTO_API_KEY": "…", … }` (plain strings) |
-| Local HTTP | `"url": "http://127.0.0.1:8765/mcp"` and **`headers`** with `X-DEVTO-API-KEY` / `X-HASHNODE-*` (see [Quick start](#quick-start-cursor-and-claude-desktop)); run `MCP_TRANSPORT=http uv run python -m blogging_mcp` |
+| Local HTTP | `"url": "http://127.0.0.1:8765/mcp"` and **`headers`** (see [Cursor](#2-cursor)); run `MCP_TRANSPORT=http uv run python -m blogging_mcp` |
 
 **Claude Desktop (stdio)** — replace `cwd` with your clone path:
 
@@ -192,6 +204,9 @@ Environment:
 - `MCP_TRANSPORT` — `stdio` (default) or `http`
 - `MCP_HTTP_HOST` — bind address (default `127.0.0.1`)
 - `MCP_HTTP_PORT` — port when using `http` (default `8765`)
+- `MCP_HTTP_TIMEOUT` — HTTP client timeout in seconds for dev.to / Hashnode calls (default `30`)
+
+Streamable HTTP behavior (JSON vs SSE, stateless mode) is controlled by **FastMCP** — see its docs and env vars such as **`FASTMCP_JSON_RESPONSE`** / **`FASTMCP_STATELESS_HTTP`** if you need to tune the transport.
 
 Or:
 
@@ -219,7 +234,7 @@ uv run uvicorn blogging_mcp.asgi:app --host 0.0.0.0 --port 8765
 
 Use this when you want the same knobs as the FastMCP guide (workers, middleware, mounting in Starlette/FastAPI, etc.).
 
-**Production notes (from FastMCP):** put TLS and timeouts in front (e.g. nginx with **`proxy_buffering off`** for SSE), consider **`FASTMCP_STATELESS_HTTP=true`** when running multiple workers or behind a load balancer, and add **authentication** for anything reachable on the internet — see [Authentication](https://gofastmcp.com/servers/auth/authentication) in the FastMCP docs.
+**Production notes (from FastMCP):** put TLS and timeouts in front (e.g. nginx with **`proxy_buffering off`** for SSE), consider **`FASTMCP_STATELESS_HTTP=true`** behind load balancers, and add **authentication** for anything reachable on the internet — see [Authentication](https://gofastmcp.com/servers/auth/authentication) in the FastMCP docs.
 
 ## Tools
 
