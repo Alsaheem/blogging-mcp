@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "blogging-mcp": {
-      "url": "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+      "url": "https://blogging-mcp.adebisiayomide.com/mcp",
       "headers": {
         "X-DEVTO-API-KEY": "ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
         "X-HASHNODE-TOKEN": "MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",

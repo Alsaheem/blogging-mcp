@@ -6,7 +6,7 @@ An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://g
 
 Use the **remote** server—no clone, no Python, no local process. You only need dev.to and Hashnode credentials and a client config.
 
-**Endpoint:** `https://blogging-mcp-81529650669.europe-west1.run.app/mcp`
+**Endpoint:** `https://blogging-mcp.adebisiayomide.com/mcp`
 
 ### Encode your credentials
 
@@ -40,7 +40,7 @@ A single `Authorization: Bearer …` header is **not** enough for this server un
 {
   "mcpServers": {
     "blogging-mcp": {
-      "url": "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+      "url": "https://blogging-mcp.adebisiayomide.com/mcp",
       "headers": {
         "X-DEVTO-API-KEY": "ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
         "X-HASHNODE-TOKEN": "MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAx",
@@ -76,7 +76,7 @@ Merge `"mcpServers"` with any existing keys (e.g. `"preferences"`).
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://blogging-mcp-81529650669.europe-west1.run.app/mcp",
+        "https://blogging-mcp.adebisiayomide.com/mcp",
         "--header",
         "X-DEVTO-API-KEY: ZXhhbXBsZS1kZXZ0by1rZXktcGxhY2Vob2xkZXI=",
         "--header",
