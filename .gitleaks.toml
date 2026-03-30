@@ -1,0 +1,15 @@
+title = "blogging-mcp"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented placeholders and example client configs"
+paths = [
+  '''README\.md''',
+  '''docs\/''',
+  '''blogs\/''',
+  '''.*\.example$''',
+  '''\.env\.example''',
+  '''mcp\..*\.example''',
+]

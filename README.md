@@ -1,5 +1,7 @@
 # Blogging MCP
 
+[![CI](https://github.com/alsaheem/blogging-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/alsaheem/blogging-mcp/actions/workflows/ci.yml)
+
 **Documentation & quick setup:** [alsaheem.github.io/blogging-mcp](https://alsaheem.github.io/blogging-mcp/)
 
 An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://gofastmcp.com/) that publishes Markdown articles to **dev.to** and **Hashnode** in one call—so your AI agent can draft posts across both platforms while you review and publish. Hashnode uses the [GraphQL API](https://docs.hashnode.com/quickstart/introduction) (`POST https://gql.hashnode.com`); see the [Hashnode API reference](https://apidocs.hashnode.com/).
@@ -263,6 +265,8 @@ uv run ruff check .
 uv run ruff format .
 uv run pytest
 ```
+
+On **public GitHub**, this repo also runs **[Gitleaks](https://github.com/gitleaks/gitleaks)** on pushes and pull requests (secret detection in git history), **[CodeQL](https://codeql.github.com/)** for Python security analysis (results under **Security → Code scanning**), and **[Dependabot](https://docs.github.com/en/code-security/dependabot)** for weekly updates to GitHub Actions and `uv` dependencies. All of these are **free** for public repositories.
 
 ### GitHub Actions → Docker Hub
 
