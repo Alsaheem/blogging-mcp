@@ -266,9 +266,11 @@ uv run ruff format .
 uv run pytest
 ```
 
+On **public GitHub**, this repo also runs **[Gitleaks](https://github.com/gitleaks/gitleaks)** on pushes and pull requests (secret detection in git history), **[CodeQL](https://codeql.github.com/)** for Python security analysis (results under **Security → Code scanning**), and **[Dependabot](https://docs.github.com/en/code-security/dependabot)** for weekly updates to GitHub Actions and `uv` dependencies. All of these are **free** for public repositories.
+
 ### GitHub Actions → Docker Hub
 
-On **push to `main`/`master`** (after lint + tests pass), CI builds **`linux/amd64`** and pushes **`alsaheem/blogging-mcp:latest`**.
+On **pull requests**, CI runs lint, tests, and a **Docker build** tagged `sha-<commit>` (image is **not** pushed). On **push to `main`/`master`** (after lint + tests pass), CI builds **`linux/amd64`** and pushes **`alsaheem/blogging-mcp:latest`**, **`alsaheem/blogging-mcp:<version>`**, and **`alsaheem/blogging-mcp:<version>-<commit-sha>`**, where **`<version>`** comes from `pyproject.toml` (`[project].version`).
 
 Add these **repository secrets** (Settings → Secrets and variables → Actions):
 
