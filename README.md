@@ -1,5 +1,7 @@
 # Blogging MCP
 
+[![CI](https://github.com/alsaheem/blogging-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/alsaheem/blogging-mcp/actions/workflows/ci.yml)
+
 **Documentation & quick setup:** [alsaheem.github.io/blogging-mcp](https://alsaheem.github.io/blogging-mcp/)
 
 An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://gofastmcp.com/) that publishes Markdown articles to **dev.to** and **Hashnode** in one call—so your AI agent can draft posts across both platforms while you review and publish. Hashnode uses the [GraphQL API](https://docs.hashnode.com/quickstart/introduction) (`POST https://gql.hashnode.com`); see the [Hashnode API reference](https://apidocs.hashnode.com/).
@@ -277,6 +279,14 @@ Add these **repository secrets** (Settings → Secrets and variables → Actions
 
 You can also run the workflow manually (**Actions → CI → Run workflow**).
 
+## Contributing
+
+Contributions are welcome. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for setup, running `ruff` and `pytest`, and pull request expectations.
+
+For **security vulnerabilities**, use [SECURITY.md](SECURITY.md) and do not file public issues with exploit details.
+
+Large behavior or API changes are easier to review when discussed in an issue first.
+
 ## Docker
 
 The image is built from `pyproject.toml`, `uv.lock`, and `src/` only. **`.env` is in `.dockerignore`** — it is not copied into the build context, so secrets from your laptop are **not** baked into image layers **unless** you add `ARG`/`ENV` with keys in the `Dockerfile` (don’t).
@@ -341,4 +351,4 @@ Then Cursor can use `"url": "http://127.0.0.1:8765/mcp"`.
 
 ## License
 
-MIT
+This project is licensed under the [MIT License](LICENSE).

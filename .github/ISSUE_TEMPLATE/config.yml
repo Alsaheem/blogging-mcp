@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://alsaheem.github.io/blogging-mcp/
+    about: Hosted setup and usage guide.
