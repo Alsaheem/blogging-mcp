@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/alsaheem/blogging-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/alsaheem/blogging-mcp/actions/workflows/ci.yml)
 
+**Current release:** `0.2.0` — set in `pyproject.toml` (`[project].version`) and `blogging_mcp.__version__`. After this lands on `main`, Docker Hub will publish `alsaheem/blogging-mcp:0.2.0`, `alsaheem/blogging-mcp:0.2.0-<git-sha>`, and update `alsaheem/blogging-mcp:latest`.
+
 **Documentation & quick setup:** [alsaheem.github.io/blogging-mcp](https://alsaheem.github.io/blogging-mcp/)
 
 An [MCP](https://modelcontextprotocol.io/) server built with [FastMCP](https://gofastmcp.com/) that publishes Markdown articles to **dev.to** and **Hashnode** in one call—so your AI agent can draft posts across both platforms while you review and publish. Hashnode uses the [GraphQL API](https://docs.hashnode.com/quickstart/introduction) (`POST https://gql.hashnode.com`); see the [Hashnode API reference](https://apidocs.hashnode.com/).
