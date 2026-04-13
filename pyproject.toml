@@ -42,7 +42,7 @@ include = ["src/blogging_mcp", "README.md", "LICENSE", "pyproject.toml"]
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.24.0",
-    "respx>=0.21.0",
+    "respx>=0.23.1",
     "ruff>=0.8.0",
 ]
 
